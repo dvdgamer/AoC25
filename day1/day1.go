@@ -4,37 +4,50 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	// "math"
 	"os"
+	"strconv"
 )
 
 func main() {
-	file, err := os.Open("./test-input.txt")
-	// file, err := os.Open("./input.txt")
+	// file, err := os.Open("./test-input.txt")
+	file, err := os.Open("./input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
-	var number int
+	res := 0
+	dial := 50
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		line := (scanner.Text())
-		direction := line[0]
-		if line[0] == 'L' {
-			number = line.lenlen()
-		} else if line[0] == 'R' {
-
+		line := scanner.Text()
+		number, err := strconv.Atoi(line[1:])
+		if err != nil {
+			log.Fatal(err)
 		}
-
-		fmt.Println(direction)
-		// fmt.Println(line)
-		// fmt.Printf(scanner.Text())
-		// fmt.Println(scanner.Text())
+		if line[0] == 'L' {
+			number = number % 100
+			if number > dial {
+				dial = dial + 100
+			}
+			dial -= number
+		} else if line[0] == 'R' {
+			dial += number
+		} else {
+			log.Fatal(err)
+		}
+		if dial > 99 {
+			dial = dial % 100
+		}
+		if dial == 0 {
+			res++
+		}
+		fmt.Println(dial)
 	}
+	fmt.Println("res:", res)
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	// input, err := io.ReadAll(file) //gives ASCII values
-	// fmt.Print(string(test_input))
 }
