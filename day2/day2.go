@@ -8,28 +8,31 @@ import (
 	"strings"
 )
 
-func checker(val int, stringVal string, len int) int {
-	// slice number in half
-	// check if halved numbers are the same
-	// return number
-	return 0
+func checker(stringVal string, len int) bool {
+	firstHalf := stringVal[0 : len/2]
+	secondHalf := stringVal[len/2 : len]
+	if firstHalf == secondHalf {
+		return true
+	}
+	return false
 }
 
 func main() {
-	content, err := os.ReadFile("./test-input.txt")
-	// content, err := os.Open("./input.txt")
+	// content, err := os.ReadFile("./test-input.txt")
+	content, err := os.ReadFile("./input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var text string
+	var result int
 
+	result = 0
 	text = string(content)
 	text = strings.ReplaceAll(text, "\n", "")
 	array := strings.Split(text, ",")
-	fmt.Print(array)
+
 	for _, ranges := range array {
-		// fmt.Println(ranges)
 		values := strings.Split(ranges, "-")
 		firstVal, err := strconv.Atoi(values[0])
 		if err != nil {
@@ -40,13 +43,17 @@ func main() {
 			log.Fatal(err)
 		}
 
-		numberLen := len(strconv.Itoa(firstVal))
-		for firstVal < secondVal {
+		for firstVal <= secondVal {
 			firstStringVal := strconv.Itoa(firstVal)
+			numberLen := len(strconv.Itoa(firstVal))
 			if numberLen%2 == 0 {
-				checker(firstVal, firstStringVal, numberLen)
+				if checker(firstStringVal, numberLen) == true {
+					fmt.Println(firstStringVal)
+					result += firstVal
+				}
 			}
 			firstVal++
 		}
 	}
+	fmt.Print("result : ", result)
 }
