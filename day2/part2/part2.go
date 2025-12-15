@@ -8,18 +8,23 @@ import (
 	"strings"
 )
 
-func isSymmetric(stringVal string, len int) bool {
-	firstHalf := stringVal[0 : len/2]
-	secondHalf := stringVal[len/2 : len]
-	if firstHalf == secondHalf {
-		return true
+func repeatedPattern(stringVal string, len int) bool {
+	i := 1
+	for i <= len/2 {
+		slice := stringVal[0:i]
+		restOfString := stringVal[i:]
+		remainingChars := strings.ReplaceAll(restOfString, slice, "")
+		if remainingChars == "" {
+			return true
+		}
+		i++
 	}
 	return false
 }
 
 func main() {
-	// content, err := os.ReadFile("./test-input.txt")
-	content, err := os.ReadFile("./input.txt")
+	// content, err := os.ReadFile("../test-input.txt")
+	content, err := os.ReadFile("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,11 +51,8 @@ func main() {
 		for firstVal <= secondVal {
 			firstStringVal := strconv.Itoa(firstVal)
 			numberLen := len(strconv.Itoa(firstVal))
-			if numberLen%2 == 0 {
-				if isSymmetric(firstStringVal, numberLen) == true {
-					fmt.Println(firstStringVal)
-					result += firstVal
-				}
+			if repeatedPattern(firstStringVal, numberLen) == true {
+				result += firstVal
 			}
 			firstVal++
 		}
